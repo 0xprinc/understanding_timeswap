@@ -130,8 +130,10 @@ library TimeswapMath {
             uint256 totalInsurance = state.totalClaims.insurancePrincipal;
             totalInsurance += state.totalClaims.insuranceInterest;
 
-            // 
             if (totalCollateral * totalBond > deficit * totalInsurance) {
+                
+                // collateral will be in same proportion as the liquidity provided by the LP to the pool to total liquidity
+                // collateral = (totalCollateral  - (deficit * totalInsurance / totalBond)) * liquidityIn / totalLiquidity
                 uint256 _collateralOut = totalCollateral;
                 uint256 subtrahend = deficit;
                 subtrahend *= totalInsurance;
@@ -363,11 +365,10 @@ library TimeswapMath {
                 tokensOut.asset = _assetOut.toUint128();
             }
             
-            // defici is the difference between needed and the present asset 
+            // deficit is the difference between needed and the present asset 
             uint256 deficit = totalBond;
             unchecked { deficit -= totalAsset; }
 
-            // 
             uint256 totalInsurancePrincipal = state.totalClaims.insurancePrincipal;
             totalInsurancePrincipal *= deficit;
             uint256 totalInsuranceInterest = state.totalClaims.insuranceInterest;
@@ -380,12 +381,21 @@ library TimeswapMath {
 
 
             if (totalCollateral >= totalInsurance) {
+
+                // collateral transfered to lender = (insurancePrincipal + insuranceInterest) * deficit / totalBond
                 uint256 _collateralOut = claimsIn.insurancePrincipal;
                 _collateralOut += claimsIn.insuranceInterest;
                 _collateralOut *= deficit;
                 _collateralOut /= totalBond;
                 tokensOut.collateral = _collateralOut.toUint128();
-            } else if (totalCollateral >= totalInsurancePrincipal) {
+
+            }
+            
+            else if (totalCollateral >= totalInsurancePrincipal) {
+
+                // collateral received is in the same proportion as in the 
+                // collateral = ((totalInsuranceInterest * totalBond) * (totalCollateral - totalInsurancePrincipal) / (totalInsuranceInterest * totalBond)) + (insurancePrincipal * deficit / totalBond)
+                
                 uint256 remaining = totalCollateral;
                 unchecked { remaining -= totalInsurancePrincipal; }
                 uint256 _collateralOut = claimsIn.insuranceInterest;
@@ -399,6 +409,8 @@ library TimeswapMath {
                 _collateralOut += addend;
                 tokensOut.collateral = _collateralOut.toUint128();
             } else {
+
+                // collateral  = (insurancePrincipal * deficit) * totalCollateral / (totalInsurancePrincipal * totalBond)
                 uint256 _collateralOut = claimsIn.insurancePrincipal;
                 _collateralOut *= deficit;
                 uint256 denominator = totalInsurancePrincipal;
