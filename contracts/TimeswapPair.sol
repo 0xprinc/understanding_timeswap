@@ -564,12 +564,14 @@ contract TimeswapPair is IPair, ReentrancyGuard {
         // fetching the pool
         Pool storage pool = pools[param.maturity];
 
-        // 
+        // array of debts borrowed by the borrower 
         Due[] storage dues = pool.dues[param.owner];
         require(dues.length >= length, 'E205');
 
-
+        // updating the values for asset paid by the owner to every collateralized debt 
         for (uint256 i; i < length;) {
+
+
             Due storage due = dues[param.ids[i]];
             require(due.startBlock != BlockNumber.get(), 'E207');
 
@@ -579,6 +581,7 @@ contract TimeswapPair is IPair, ReentrancyGuard {
             if (param.owner != msg.sender) require(_collateralOut == 0, 'E213');
             require(uint256(_assetIn) * due.collateral >= uint256(_collateralOut) * due.debt, 'E303');
             
+            // updating the asset submitted by the borrower and the collateral withdrawn by the borrower 
             due.debt -= _assetIn;
             due.collateral -= _collateralOut;
             assetIn += _assetIn;
