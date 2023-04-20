@@ -27,9 +27,9 @@ This repo has intensive comments on how is the logic and the mthematics given in
 
 # TO-DO List
 
-- [ ]Reading the documemtation and Whitepaper of TimeSwap-V1.
+- [ ] Reading the documemtation and Whitepaper of TimeSwap-V1.
 - [x] Reading and understanding all the contracts.
 - [X] Understanding each and every part of all the contracts.
 - [X] Writing intensive comments on the all the parts of the repo.
 - [X] Understanding the tests.
-- [] Writing my own tests using Foundry.
+- [ ] Writing my own tests using Foundry.
