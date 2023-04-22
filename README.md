@@ -33,7 +33,7 @@ I have written intensive comments on how is the logic and the mathematics given 
 
 ## TO-DO List
 
-- [ ] Reading the documemtation and Whitepaper of TimeSwap-V1.
+- [X] Reading the documentation and Whitepaper of TimeSwap-V1.
 - [x] Reading and understanding all the contracts.
 - [X] Understanding each and every part of all the contracts.
 - [X] Writing intensive comments on the all the parts of the repo.
